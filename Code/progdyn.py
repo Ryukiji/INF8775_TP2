@@ -1,34 +1,29 @@
 import sys
 import time
-
-class Box:
-    def __init__(self, h, l, p):
-        self.h = h
-        self.l = l
-        self.p = p
+from utils import isLegal, sortsurface
 
 '''
 Algorithme programmation dynamique.
 '''
 def progdyn(points):
-    boxes = {}
-    result = []
-    for i in points:
-        boxes[i[1]*i[2]] = i
-    keys = sorted(boxes.keys(), reverse=True)
-    for key in keys:
-        result.append(boxes[key])
-    print(result)
-    n = len(result)
+    sortedPoints = sorted(points, key = sortsurface, reverse=True)
+    n = len(sortedPoints)
     max_height = [0]*n
     for i in range(n):
+        max_height[i] = sortedPoints[i][0]
+
+    for i in range(n):
         for j in range(i):
-            if (result[i][1] < result[j][1] and result[i][2] < result[j][2]):
-                max_height[i] = max(max_height[i], max_height[j])
-        max_height[i] += result[i][0]
+            if (sortedPoints[i][1] < sortedPoints[j][1] and sortedPoints[i][2] < sortedPoints[j][2]):
+                if max_height[i] < max_height[j] + sortedPoints[i][0]:
+                    max_height[i] = max_height[j] + sortedPoints[i][0]
+    
+    maxm = 0
+    for i in range(n):
+        maxm = max(maxm, max_height[i])
 
 
-    return max(max_height)
+    return maxm
 
 
 def execute_progdyn(points):

@@ -24,5 +24,6 @@ def glouton(points):
 def execute_glouton(points):
     start = time.time()
     tour = glouton(points)
+    print(tour)
     end = time.time()
     return end-start, tour

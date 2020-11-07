@@ -4,7 +4,7 @@ Trie les points par surface
 sortedPoints = sorted(POINTS, key = sortsurface, reverse=True)
  """
 def sortsurface(val): 
-    return val[0]*val[1] 
+    return val[1]*val[2] 
 
 '''
 Calcule la distance entre deux points
