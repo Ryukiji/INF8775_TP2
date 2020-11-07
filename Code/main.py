@@ -5,10 +5,12 @@ import sys
 import time
 import csv
 
+
 from glouton import execute_glouton
 from progdyn import execute_progdyn
 from taboo import execute_tabou
 from pathlib import Path
+from utils import isLegal, sortsurface
 
 PATH = "./"
 
@@ -76,7 +78,6 @@ def main(argv):
         
 
 if __name__ == "__main__":
-    #main(sys.argv[1:])
-    POINTS = generate_points('../Exemplaires/b100_1.txt')
-    time, tour = execute_progdyn(POINTS)
-print('wait')
+##    main(sys.argv[1:])
+    POINTS = generate_points('../Exemplaires/b100_2.txt')
+    time, tour = execute_glouton(POINTS)
