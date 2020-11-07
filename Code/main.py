@@ -76,7 +76,7 @@ def main(argv):
         
 
 if __name__ == "__main__":
-##    main(sys.argv[1:])
+    #main(sys.argv[1:])
     POINTS = generate_points('../Exemplaires/b100_1.txt')
-    time, tour = execute_glouton(POINTS)
+    time, tour = execute_progdyn(POINTS)
 print('wait')
