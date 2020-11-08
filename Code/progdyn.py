@@ -18,9 +18,7 @@ def progdyn(points):
                 if max_height[i] < max_height[j] + sortedPoints[i][0]:
                     max_height[i] = max_height[j] + sortedPoints[i][0]
     
-    maxm = 0
-    for i in range(n):
-        maxm = max(maxm, max_height[i])
+    maxm = max(max_height)
 
 
     return maxm
