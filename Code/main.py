@@ -104,5 +104,7 @@ def main(argv):
 
 if __name__ == "__main__":
     ##    main(sys.argv[1:])
-    POINTS = generate_points('../Exemplaires/test.txt')
+    POINTS = generate_points('../Exemplaires/b100_2.txt')
+    time, tour = execute_glouton(POINTS)
     time, tour = execute_progdyn(POINTS)
+    time, tour = execute_tabou(POINTS)

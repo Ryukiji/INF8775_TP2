@@ -16,9 +16,9 @@ def glouton(points):
         del sortedPoints[0]
         if(isLegal(b, tour)):
             tour.append(b)
-            tourHeight += b[2]
+            tourHeight += b[0]
 
-    return tour
+    return tourHeight
 
 
 def execute_glouton(points):
