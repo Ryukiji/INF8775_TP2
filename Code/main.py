@@ -4,6 +4,7 @@ import math
 import sys
 import time
 import csv
+import os
 
 
 from glouton import execute_glouton
@@ -22,6 +23,30 @@ def generate_points(FILE):
     with open(FILE) as f:
         mylist = [tuple(map(float, i.split(' '))) for i in f]
     return mylist
+
+
+def analyseDesResultats(program):
+    #Il faut modifier le retour des fonctions pour qu'ils ne retournent que le max height pour l'analyse
+    path_exemplaires = "../Exemplaires"
+    exemplaires = os.listdir(path_exemplaires)
+    newFilePath = "../Exemplaires/results/"+program+".csv"
+    newFile = os.path.isfile(newFilePath)
+    print(exemplaires)
+    with open(newFilePath, "w") as f: 
+        if not newFile : 
+            f.write("exemplaires,temps,height")
+        for exemplaire in exemplaires : 
+            d = generate_points("../Exemplaires/"+exemplaire)
+            start_time = time.time()
+            if program == "dynamic":
+                height = str(execute_progdyn(d))
+            elif program == "glouton":
+                height = str(execute_glouton(d))
+            elif program == "taboo":
+                height = str(execute_glouton(d))              
+            execution_time = str(time.time() - start_time)
+            print(exemplaire, execution_time, height)
+            f.write(exemplaire + ',' + execution_time + ',' + height)
 
 
 '''
@@ -78,6 +103,6 @@ def main(argv):
         
 
 if __name__ == "__main__":
-##    main(sys.argv[1:])
+    ##    main(sys.argv[1:])
     POINTS = generate_points('../Exemplaires/test.txt')
     time, tour = execute_progdyn(POINTS)
