@@ -21,6 +21,8 @@ def progdyn(points):
                     blocs[sortedPoints[i]] = sortedPoints[j]
     
     answer = []
+    maxm = max(max_height)
+    print(maxm)
     tempBlocs = sorted(blocs, key = sortsurface, reverse=False)
     currentBloc = tempBlocs[0]
     while currentBloc in blocs.keys():
