@@ -17,5 +17,5 @@ while [ "$1" != "" ]; do
     esac
     shift
 done
-/usr/bin/g++ -std=c++17 /Users/mouradyounes/AUT2020_V1/INF8775/INF8775_TP2/Code/src/main.cpp -o main
+/usr/bin/g++ -std=c++17 src/main.cpp -o main
 ./main $ALGO $PATH $P $T
