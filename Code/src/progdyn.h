@@ -44,7 +44,7 @@ list<tuple<int,int,int>> dynamicProgramming(list<tuple<int,int,int>>* points) {
     }
 
     std::list<tuple<int,int,int>> key, answer;
- /*   for(std::map<tuple<int,int,int>, tuple<int,int,int>>::iterator it = blocs.begin(); it != blocs.end(); ++it) {
+    for(std::map<tuple<int,int,int>, tuple<int,int,int>>::iterator it = blocs.begin(); it != blocs.end(); ++it) {
         key.push_back(it->first);
     }
     key.sort(reverseSortSurface);
@@ -55,7 +55,7 @@ list<tuple<int,int,int>> dynamicProgramming(list<tuple<int,int,int>>* points) {
     }
     answer.push_back(currentBloc);
     answer.sort(sortSurface);
-*/
+
     int max = -1; 
     for ( int i = 0; i < n; i++ ) 
         if ( max < height[i] ) 
