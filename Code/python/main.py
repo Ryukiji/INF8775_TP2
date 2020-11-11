@@ -107,5 +107,6 @@ if __name__ == "__main__":
     POINTS = generate_points('/Users/mouradyounes/AUT2020_V1/INF8775/INF8775_TP2/Exemplaires/b100_1.txt')
     #POINTS = [(4, 6, 7), (6, 4, 7), (7, 4, 6), (1, 2, 3), (2, 1 ,3), (3, 1 ,2), (4, 5, 6), (5, 4, 6), (6, 4 ,5), (10, 12, 32), (12, 10, 32), (32, 10, 12)]
     #time, tour = execute_glouton(POINTS)
-    time, tour = execute_progdyn(POINTS)
+    #time, tour = execute_progdyn(POINTS)
     #time, tour = execute_tabou(POINTS)
+    #print(tour)

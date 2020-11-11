@@ -1,3 +1,5 @@
+#ifndef TABU_H
+#define TABU_H
 #include <iostream>
 #include <list>
 #include <tuple>
@@ -5,41 +7,9 @@
 #include <map>
 #include <fstream>
 #include <sstream>
+#include "utils.h"
 
 using namespace std;
-
-
-
-
-
-int totalHeight(std::list<tuple<int, int, int>>* points) {
-    int height = 0;
-    
-    for (std::list<tuple<int, int, int>>::iterator it = points->begin(); it != points->end(); ++it) {
-        height += get<0>(*it);
-    }
-
-    return height;
-}
-
-bool isLegal(tuple<int, int, int> b, std::list<tuple<int, int, int>>* tour) {
-    tuple<int, int, int> s;
-
-    if (tour->size() == 0) {
-        return true;
-    }
-    else if (tour->size() > 0) {
-        list<tuple<int, int, int>>::iterator it = tour->end();
-        it--;
-        if (get<1>(*it) > get<1>(b) && get<2>(*it) > get<2>(b)) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-	return true;
-}
 
 list<tuple<int, int, int>> fitVoisinsInSolution(list<tuple<int, int, int>>* localSolution, list<tuple<int, int, int>>* blocsRemoved, tuple<int, int, int> bloc) {
 	list<tuple<int, int, int>> candidate = *localSolution;
@@ -60,7 +30,7 @@ list<tuple<int, int, int>> fitVoisinsInSolution(list<tuple<int, int, int>>* loca
 			candidate.push_back(*it);
 			//*it = blocsRemoved->erase(next(it).base());
             it = decltype(it)(blocsRemoved->erase(std::next(it).base()));
-            cout << "hi" << endl;
+			i--;
         }
         else {
             ++it;
@@ -133,7 +103,7 @@ list<tuple<int, int, int>> maximize(list<tuple<int, int, int>>* solutionLocal, l
     return solutionMaximized;
 }
 
-int tabou(std::list<tuple<int, int, int>>* points) {
+list<tuple<int, int, int>> tabou(std::list<tuple<int, int, int>>* points) {
     
     list<tuple<int, int, int>> solutionGlobale = {};
     list<tuple<int, int, int>> solutionLocale = {};
@@ -151,21 +121,10 @@ int tabou(std::list<tuple<int, int, int>>* points) {
 			iterationWithoutAmelioration += 1;
 		}
 	}
-
-    return totalHeight(&solutionGlobale);
+	cout << totalHeight(&solutionGlobale) << endl;
+    return solutionGlobale;
 }
-std::list<tuple<int, int, int>> vorace(std::list<tuple<int, int, int>>* points) {
-    points->sort(sortSurface);
-    std::list<tuple<int, int, int>> tour;
-    for (std::list<tuple<int, int, int>>::iterator it = points->begin(); it != points->end(); ++it) {
-        if (isLegal(*it, &tour))
-        {
-            tour.push_back(*it);
-        }
-    }
-    return tour;
-}
-
+#endif
 
 
 //int main() {

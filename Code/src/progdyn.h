@@ -1,3 +1,5 @@
+#ifndef PROGDYN_H
+#define PROGDYN_H
 #include <iostream>
 #include <list>
 #include <tuple>
@@ -5,16 +7,9 @@
 #include <map>
 #include <fstream>
 #include <sstream>
+#include "utils.h"
 
 using namespace std;
-
-int sortSurface(tuple<int,int,int> point1, tuple<int,int,int> point2) {
-    return get<1>(point1) * get<2>(point1) > get<1>(point2) * get<2>(point2);
-}
-
-int reverseSortSurface(tuple<int,int,int> point1, tuple<int,int,int> point2) {
-    return get<1>(point1) * get<2>(point1) < get<1>(point2) * get<2>(point2);
-}
 
 list<tuple<int,int,int>> dynamicProgramming(list<tuple<int,int,int>>* points) {
     points->sort(sortSurface);
@@ -64,3 +59,4 @@ list<tuple<int,int,int>> dynamicProgramming(list<tuple<int,int,int>>* points) {
 
     return answer;
 }
+#endif
