@@ -20,7 +20,7 @@ int reverseSortSurface(tuple<int,int,int> point1, tuple<int,int,int> point2) {
 
 int totalHeight(std::list<tuple<int, int, int>>* points) {
     int height = 0;
-    
+
     for (std::list<tuple<int, int, int>>::iterator it = points->begin(); it != points->end(); ++it) {
         height += get<0>(*it);
     }
@@ -44,6 +44,20 @@ bool isLegal(tuple<int, int, int> b, std::list<tuple<int, int, int>>* tour) {
             return false;
         }
     }
-	return true;
+    return true;
+}
+bool canBlockFit(tuple<int, int, int> topBlock, tuple<int, int, int> bottomBlock) {
+    return get<1>(bottomBlock) > get<1>(topBlock) &&
+        get<2>(bottomBlock) > get<2>(topBlock);
+}
+int findHighestFittingIndex(list<tuple<int, int, int>>& towerBlocks, tuple<int, int, int>* block) {
+    std::list<tuple<int, int, int>>::iterator it = towerBlocks.begin();
+    for (int i = 0; i < towerBlocks.size(); ++i) {
+        if (!canBlockFit(*block, *it)) {
+            return i;
+        }
+        ++it;
+    }
+    return 0;
 }
 #endif
