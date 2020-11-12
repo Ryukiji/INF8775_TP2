@@ -1,0 +1,8 @@
+Methode,Taille,Temps
+glouton,100,0.000030
+glouton,500,0.000171
+glouton,1000,0.000367
+glouton,5000,0.002327
+glouton,10000,0.005029
+glouton,50000,0.037885
+glouton,100000,0.107009
