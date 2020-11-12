@@ -12,33 +12,36 @@
 using namespace std;
 
 list<tuple<int, int, int>> fitVoisinsInSolution(list<tuple<int, int, int>>* localSolution, list<tuple<int, int, int>>* blocsRemoved, tuple<int, int, int> bloc) {
-	list<tuple<int, int, int>> candidate = *localSolution;
-	bool fit = false;
+    list<tuple<int, int, int>> candidate = *localSolution;
+    int posIndexMaxFound = 0;
 
-	while (!fit) {
-		if (isLegal(bloc, &candidate)) {
-			candidate.push_back(bloc);
-			fit = true;
-		} else {
-			blocsRemoved->push_back(candidate.back());
-			candidate.remove(candidate.back());
-		}
-	}
-    list<tuple<int, int, int>>::reverse_iterator it = blocsRemoved->rbegin();
-	for (int i = 0; i < blocsRemoved->size(); i++) {
-		if (isLegal(*it, &candidate)) {
-			candidate.push_back(*it);
-			//*it = blocsRemoved->erase(next(it).base());
-            it = decltype(it)(blocsRemoved->erase(std::next(it).base()));
-			i--;
-        }
-        else {
-            ++it;
-        }
-            
 
-	}
-	return candidate;
+    posIndexMaxFound = findHighestFittingIndex(candidate, &bloc);
+
+
+    list<tuple< int, int, int >>::iterator it1 = candidateTest.begin();
+    advance(it1, posIndexMaxFound);
+    if (candidate.size() == 0) {
+        candidate.push_back(bloc);
+    }
+    else {
+        candidate.insert(it1, bloc);
+    }
+
+
+    for (int i = posIndexMaxFound + 1; i < candidate.size(); i++) {
+        if (!canBlockFit(*it1, bloc)) {
+            // Enlever de la tour
+            blocsRemoved->push_back(*it1);
+            candidate.erase(it1);
+            it1 = candidate.begin();
+            advance(it1, posIndexMaxFound + 1);
+            --i;
+        }
+        else
+            break;
+    }
+    return candidate;
 }
 
 list<tuple<int, int, int>> deleteFromTabou(list<tuple<int, int, int, int>>* tabuList) {
@@ -121,7 +124,7 @@ list<tuple<int, int, int>> tabou(std::list<tuple<int, int, int>>* points) {
 			iterationWithoutAmelioration += 1;
 		}
 	}
-	cout << totalHeight(&solutionGlobale) << endl;
+	//cout << totalHeight(&solutionGlobale) << endl;
     return solutionGlobale;
 }
 #endif
