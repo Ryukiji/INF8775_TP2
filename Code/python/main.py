@@ -11,14 +11,7 @@ import pandas as pd
 import seaborn as sns
 import sys
 
-
-from glouton import execute_glouton
-from progdyn import execute_progdyn
-from taboo import execute_tabou
 from pathlib import Path
-from utils import isLegal, sortsurface
-
-PATH = "./"
 
 '''
 Fonction qui calcule le test de rapport
@@ -61,4 +54,4 @@ def test_constante(tablePath):
         
 
 if __name__ == "__main__":
-    test_constante("/Users/mouradyounes/AUT2020_V1/INF8775/INF8775_TP2/Code/python/progdyn.csv")
+    test_constante("./progdyn.csv")
