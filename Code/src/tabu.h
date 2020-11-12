@@ -133,7 +133,7 @@ list<tuple<int, int, int>> maximize(list<tuple<int, int, int>>* solutionLocal, l
     return solutionMaximized;
 }
 
-list<tuple<int, int, int>> tabou(std::list<tuple<int, int, int>>* points) {
+int tabou(std::list<tuple<int, int, int>>* points) {
     
     list<tuple<int, int, int>> solutionGlobale = {};
     list<tuple<int, int, int>> solutionLocale = {};
@@ -152,7 +152,7 @@ list<tuple<int, int, int>> tabou(std::list<tuple<int, int, int>>* points) {
 		}
 	}
 	//cout << totalHeight(&solutionGlobale) << endl;
-    return solutionGlobale;
+    return totalHeight(&solutionGlobale);
 }
 #endif
 
