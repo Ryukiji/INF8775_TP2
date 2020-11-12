@@ -4,7 +4,12 @@ import math
 import sys
 import time
 import csv
-import os
+import csv
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
+import sys
 
 
 from glouton import execute_glouton
@@ -24,29 +29,67 @@ def generate_points(FILE):
         mylist = [tuple(map(float, i.split(' '))) for i in f]
     return mylist
 
+'''
+Fonction qui calcule le test de rapport
+'''
+def test_rapport(tablePath):
+    data = pd.read_csv(tablePath)
+##        On change fx n**2 pour brute et nlog(n) pour recursif et seuil
+    data["Temps"] = data["Temps"]/(data["Taille"]**2)
+    colors = ["b", "r", "g"]
+    plt.clf()
+    fig = plt.figure()   
+    ax = fig.add_subplot(1,1,1)
+    x = np.array(data["Taille"])
+    y = np.array(data["Temps"])
+    ax.scatter(x, y, c = colors[0])
+    print(np.polyfit(x, y, 1))
 
-def analyseDesResultats(program):
-    #Il faut modifier le retour des fonctions pour qu'ils ne retournent que le max height pour l'analyse
-    path_exemplaires = "../Exemplaires"
-    exemplaires = os.listdir(path_exemplaires)
-    newFilePath = "../Exemplaires/results/"+program+".csv"
-    newFile = os.path.isfile(newFilePath)
-    print(exemplaires)
-    with open(newFilePath, "w") as f: 
-        if not newFile : 
-            f.write("exemplaires,temps,height")
-        for exemplaire in exemplaires : 
-            d = generate_points("../Exemplaires/"+exemplaire)
-            start_time = time.time()
-            if program == "dynamic":
-                height = str(execute_progdyn(d))
-            elif program == "glouton":
-                height = str(execute_glouton(d))
-            elif program == "taboo":
-                height = str(execute_glouton(d))              
-            execution_time = str(time.time() - start_time)
-            print(exemplaire, execution_time, height)
-            f.write(exemplaire + ',' + execution_time + ',' + height)
+    ax.legend(loc="lower right")
+    plt.show()
+    fig.savefig("Rapport progdyn")
+
+
+def test_constante(tablePath):
+    data = pd.read_csv(tablePath)
+    colors = ["b", "r", "g"]
+    plt.clf()
+    fig = plt.figure()   
+    ax = fig.add_subplot(1,1,1)
+##        On change fx n**2 pour brute et nlog(n) pour recursif et seuil
+    fx=(data["Taille"])**2
+    x = np.array(fx)
+    y = np.array(data["Temps"])
+    ax.scatter(x, y, c = colors[0])
+    ax.plot(x, np.poly1d(np.polyfit(x, y, 1))(x),c= colors[0])
+    #print(np.poly1d(np.polyfit(x, y, 1))(x))
+
+    ax.legend(loc="lower right")
+    plt.show()
+    fig.savefig("constante progdyn")
+
+# def analyseDesResultats(program):
+#     #Il faut modifier le retour des fonctions pour qu'ils ne retournent que le max height pour l'analyse
+#     path_exemplaires = "../Exemplaires"
+#     exemplaires = os.listdir(path_exemplaires)
+#     newFilePath = "../Exemplaires/results/"+program+".csv"
+#     newFile = os.path.isfile(newFilePath)
+#     print(exemplaires)
+#     with open(newFilePath, "w") as f: 
+#         if not newFile : 
+#             f.write("exemplaires,temps,height")
+#         for exemplaire in exemplaires : 
+#             d = generate_points("../Exemplaires/"+exemplaire)
+#             start_time = time.time()
+#             if program == "dynamic":
+#                 height = str(execute_progdyn(d))
+#             elif program == "glouton":
+#                 height = str(execute_glouton(d))
+#             elif program == "taboo":
+#                 height = str(execute_glouton(d))              
+#             execution_time = str(time.time() - start_time)
+#             print(exemplaire, execution_time, height)
+#             f.write(exemplaire + ',' + execution_time + ',' + height)
 
 
 '''
@@ -104,7 +147,8 @@ def main(argv):
 
 if __name__ == "__main__":
     ##    main(sys.argv[1:])
-    POINTS = generate_points('/Users/mouradyounes/AUT2020_V1/INF8775/INF8775_TP2/Exemplaires/b100_1.txt')
+    test_rapport("/Users/mouradyounes/AUT2020_V1/INF8775/INF8775_TP2/Code/python/progdyn.csv")
+    #POINTS = generate_points('/Users/mouradyounes/AUT2020_V1/INF8775/INF8775_TP2/Exemplaires/b100_1.txt')
     #POINTS = [(4, 6, 7), (6, 4, 7), (7, 4, 6), (1, 2, 3), (2, 1 ,3), (3, 1 ,2), (4, 5, 6), (5, 4, 6), (6, 4 ,5), (10, 12, 32), (12, 10, 32), (32, 10, 12)]
     #time, tour = execute_glouton(POINTS)
     #time, tour = execute_progdyn(POINTS)
