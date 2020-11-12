@@ -11,6 +11,34 @@
 
 using namespace std;
 
+int calculHeightCandidat(list<tuple<int, int, int>>* localSolution, tuple<int, int, int> bloc) {
+    list<tuple<int, int, int>> candidate = *localSolution;
+    int solutionHeight = totalHeight(localSolution);
+    int RemovedblocHeight = 0;
+    int posIndexMaxFound = 0;
+
+
+    posIndexMaxFound = findHighestFittingIndex(candidate, &bloc);
+
+    list<tuple< int, int, int >>::iterator it1 = candidate.begin();
+    advance(it1, posIndexMaxFound);
+
+    for (int i = posIndexMaxFound + 1; i < candidate.size(); i++) {
+        if (!canBlockFit(*it1, bloc)) {
+            // Enlever de la tour
+            RemovedblocHeight = RemovedblocHeight + get<0>(*it1);
+            ++it1;
+        }
+        else
+            break;
+    }
+
+    solutionHeight = solutionHeight + get<0>(bloc) - RemovedblocHeight;
+    return solutionHeight;
+}
+
+
+
 list<tuple<int, int, int>> fitVoisinsInSolution(list<tuple<int, int, int>>* localSolution, list<tuple<int, int, int>>* blocsRemoved, tuple<int, int, int> bloc) {
     list<tuple<int, int, int>> candidate = *localSolution;
     int posIndexMaxFound = 0;
@@ -18,8 +46,7 @@ list<tuple<int, int, int>> fitVoisinsInSolution(list<tuple<int, int, int>>* loca
 
     posIndexMaxFound = findHighestFittingIndex(candidate, &bloc);
 
-
-    list<tuple< int, int, int >>::iterator it1 = candidateTest.begin();
+    list<tuple< int, int, int >>::iterator it1 = candidate.begin();
     advance(it1, posIndexMaxFound);
     if (candidate.size() == 0) {
         candidate.push_back(bloc);
@@ -36,6 +63,7 @@ list<tuple<int, int, int>> fitVoisinsInSolution(list<tuple<int, int, int>>* loca
             candidate.erase(it1);
             it1 = candidate.begin();
             advance(it1, posIndexMaxFound + 1);
+            //cout << "hi" << endl;
             --i;
         }
         else
@@ -45,64 +73,63 @@ list<tuple<int, int, int>> fitVoisinsInSolution(list<tuple<int, int, int>>* loca
 }
 
 list<tuple<int, int, int>> deleteFromTabou(list<tuple<int, int, int, int>>* tabuList) {
-	list<tuple<int, int, int>> freeNeighbors = {};
-	list<tuple<int,int,int, int>>::iterator it = tabuList->begin();
-	for (int i = 0; i < tabuList->size(); i++) {
-		get<3>(*it) -= 1;
-		if (!get<3>(*it)) {
+    list<tuple<int, int, int>> freeNeighbors = {};
+    list<tuple<int, int, int, int>>::iterator it = tabuList->begin();
+    for (int i = 0; i < tabuList->size(); i++) {
+        get<3>(*it) -= 1;
+        if (!get<3>(*it)) {
 
-			freeNeighbors.push_back(make_tuple(get<0>(*it), get<1>(*it), get<2>(*it)));
+            freeNeighbors.push_back(make_tuple(get<0>(*it), get<1>(*it), get<2>(*it)));
             it = tabuList->erase(it);
-		}
+        }
         else {
             ++it;
         }
-		
-	}
-	return freeNeighbors;
+
+    }
+    return freeNeighbors;
 }
 
 void addToTabou(list<tuple<int, int, int, int>>* tabuList, list<tuple<int, int, int>> blocsRemovedFinal) {
-	for (tuple<int,int,int> bloc : blocsRemovedFinal) {
-		tabuList->push_back(make_tuple(get<0>(bloc), get<1>(bloc), get<2>(bloc), rand()%(10-7 + 1) + 7));
-	}
+    for (tuple<int, int, int> bloc : blocsRemovedFinal) {
+        tabuList->push_back(make_tuple(get<0>(bloc), get<1>(bloc), get<2>(bloc), rand() % (10 - 7 + 1) + 7));
+    }
 }
 
 list<tuple<int, int, int>> maximize(list<tuple<int, int, int>>* solutionLocal, list<tuple<int, int, int, int>>* listTabou, list<tuple<int, int, int>>* listVoisins) {
-	list<tuple<int, int, int>> solutionMaximized = {};
-	list<tuple<int, int, int>> blocksRemovedFinal = {};
-	tuple<int, int, int> maximizingBlocs;
+    list<tuple<int, int, int>> solutionMaximized = {};
+    list<tuple<int, int, int>> blocksRemovedFinal = {};
+    tuple<int, int, int> maximizingBlocs;
+    int newTotalHeightMax = 0;
 
-	for (tuple<int, int, int> bloc : *listVoisins) {
-		list<tuple<int, int, int>> solutionCandidate;
-		list<tuple<int, int, int>> blocsRemoved;
-		solutionCandidate = fitVoisinsInSolution(solutionLocal, &blocsRemoved, bloc);
+    for (tuple<int, int, int> bloc : *listVoisins) {
+        list<tuple<int, int, int>> solutionCandidate;
+        int newTotalHeight = calculHeightCandidat(solutionLocal, bloc);
 
-		if (totalHeight(&solutionCandidate) > totalHeight(&solutionMaximized)) {
-			solutionMaximized = solutionCandidate;
-			blocksRemovedFinal = blocsRemoved;
-			maximizingBlocs = bloc;
-		}
+        if (newTotalHeight > newTotalHeightMax) {
+            newTotalHeightMax = newTotalHeight;
+            maximizingBlocs = bloc;
+        }
 
-	}
-	list<tuple<int, int, int>> voisinsLibre = deleteFromTabou(listTabou);
-	if (voisinsLibre.size()) {
-		for (tuple<int, int, int> bloc : voisinsLibre) {
-			listVoisins->push_back(bloc);
-		}
-	}
+    }
 
-	if (blocksRemovedFinal.size()) {
-		addToTabou(listTabou, blocksRemovedFinal);
-	}
+    solutionMaximized = fitVoisinsInSolution(solutionLocal, &blocksRemovedFinal, maximizingBlocs);
+    if (blocksRemovedFinal.size()) {
+        addToTabou(listTabou, blocksRemovedFinal);
+    }
+    list<tuple<int, int, int>> voisinsLibre = deleteFromTabou(listTabou);
+    if (voisinsLibre.size()) {
+        for (tuple<int, int, int> bloc : voisinsLibre) {
+            listVoisins->push_back(bloc);
+        }
+    }
+    if (true) {
+        listVoisins->remove(maximizingBlocs);
+    }
+    if (solutionMaximized.size()) {
+        solutionLocal = &solutionMaximized;
+    }
 
-	if (true) {
-		listVoisins->remove(maximizingBlocs);
-	}
-	if (solutionMaximized.size()) {
-		solutionLocal = &solutionMaximized;
-        
-	}
     return solutionMaximized;
 }
 
