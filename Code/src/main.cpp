@@ -39,6 +39,7 @@ void execute(int argc, char* argv[]) {
 	bool printBlocs = false;
 	bool printTime = false;
 	list<tuple<int,int,int>> points;
+
 	for (int i = 0; i < argc; i++) {
 		string arg(argv[i]);
 		if (!strcmp(argv[i],  "vorace")) {
@@ -62,42 +63,25 @@ void execute(int argc, char* argv[]) {
 		}
 	}
 
+    list<tuple<int,int,int>> tower = {};
+    clock_t tStart = clock();
 	if (algo == algos[0]) {
-		clock_t tStart = clock();
-    	list<tuple<int,int,int>> tower = vorace(&points);
-		if (printTime) {
-    		cout << ((double)(clock() - tStart)/CLOCKS_PER_SEC)*(1e3) << endl;
-		}
-		if (printBlocs) {
-    		for (tuple<int,int,int> box : tower) {
-        		cout << get<0>(box) << " " << get<1>(box) << " " << get<2>(box) << endl;
-    		}
-		}
+    	tower = vorace(&points);
 	}
 	else if (algo == algos[1]) {
-		clock_t tStart = clock();
-    	list<tuple<int,int,int>> tower = dynamicProgramming(&points);
-		if (printTime) {
-    		cout << ((double)(clock() - tStart)/CLOCKS_PER_SEC)*(1e3) << endl;
-		}
-		if (printBlocs) {
-    		for (tuple<int,int,int> box : tower) {
-        		cout << get<0>(box) << " " << get<1>(box) << " " << get<2>(box) << endl;
-    		}
-		}
+    	tower = dynamicProgramming(&points);
 	}
 	else if (algo == algos[2]) {
-		clock_t tStart = clock();
-    	list<tuple<int,int,int>> tower = tabou(&points);
-		if (printTime) {
-    		cout << ((double)(clock() - tStart)/CLOCKS_PER_SEC)*(1e3) << endl;
-		}
-		if (printBlocs) {
-    		for (tuple<int,int,int> box : tower) {
-        		cout << get<0>(box) << " " << get<1>(box) << " " << get<2>(box) << endl;
-    		}
-		}
+        tower = tabou(&points);
 	}
+    if (printTime) {
+        cout << ((double)(clock() - tStart)/CLOCKS_PER_SEC)*(1e3) << endl;
+    }
+    if (printBlocs) {
+        for (tuple<int,int,int> box : tower) {
+            cout << get<0>(box) << " " << get<1>(box) << " " << get<2>(box) << endl;
+        }
+    }
 }
 
 // int main() {
