@@ -1,17 +1,13 @@
 #ifndef TABU_H
 #define TABU_H
-#include <iostream>
 #include <list>
 #include <tuple>
-#include <vector>
-#include <map>
-#include <fstream>
-#include <sstream>
 #include "utils.h"
 
 using namespace std;
 
-int calculHeightCandidat(list<tuple<int, int, int>>* localSolution, tuple<int, int, int> bloc) {
+int calculHeightCandidat(list<tuple<int, int, int>>* localSolution,
+                         tuple<int, int, int> bloc) {
     list<tuple<int, int, int>> candidate = *localSolution;
     int solutionHeight = totalHeight(localSolution);
     int RemovedblocHeight = 0;
@@ -96,7 +92,9 @@ void addToTabou(list<tuple<int, int, int, int>>* tabuList, list<tuple<int, int, 
     }
 }
 
-list<tuple<int, int, int>> maximize(list<tuple<int, int, int>>* solutionLocal, list<tuple<int, int, int, int>>* listTabou, list<tuple<int, int, int>>* listVoisins) {
+list<tuple<int, int, int>> maximize(list<tuple<int, int, int>>* solutionLocal,
+                                    list<tuple<int, int, int, int>>* listTabou,
+                                    list<tuple<int, int, int>>* listVoisins) {
     list<tuple<int, int, int>> solutionMaximized = {};
     list<tuple<int, int, int>> blocksRemovedFinal = {};
     tuple<int, int, int> maximizingBlocs;
@@ -133,7 +131,7 @@ list<tuple<int, int, int>> maximize(list<tuple<int, int, int>>* solutionLocal, l
     return solutionMaximized;
 }
 
-int tabou(std::list<tuple<int, int, int>>* points) {
+list<tuple<int, int, int>> tabou(std::list<tuple<int, int, int>>* points) {
     
     list<tuple<int, int, int>> solutionGlobale = {};
     list<tuple<int, int, int>> solutionLocale = {};
@@ -151,23 +149,8 @@ int tabou(std::list<tuple<int, int, int>>* points) {
 			iterationWithoutAmelioration += 1;
 		}
 	}
-	//cout << totalHeight(&solutionGlobale) << endl;
-    return totalHeight(&solutionGlobale);
+    cout << totalHeight(&solutionGlobale) << endl;
+
+    return solutionGlobale;
 }
 #endif
-
-
-//int main() {
-//    std::list<tuple<int, int, int>> points = generatePoints("./Exemplaires/b100_2.txt");
-//	cout << "hi" << endl;
-//    int height = tabou(&points);
-//    //std::list<tuple<int, int, int>> tower = vorace(&points);
-//
-//    cout << height << endl;
-//
-//    //list<tuple<int, int, int>> tower = dynamicProgramming(&points);
-//    //for (tuple<int, int, int> box : tower) {
-//    //    cout << get<0>(box) << " " << get<1>(box) << " " << get<2>(box) << endl;
-//    //}
-//    return 0;
-//}

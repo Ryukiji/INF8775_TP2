@@ -1,12 +1,7 @@
 #ifndef PROGDYN_H
 #define PROGDYN_H
-#include <iostream>
 #include <list>
 #include <tuple>
-#include <vector>
-#include <map>
-#include <fstream>
-#include <sstream>
 #include "utils.h"
 
 using namespace std;
@@ -55,7 +50,6 @@ list<tuple<int,int,int>> dynamicProgramming(list<tuple<int,int,int>>* points) {
     for ( int i = 0; i < n; i++ ) 
         if ( max < height[i] ) 
             max = height[i];
-    cout << max << endl;
 
     return answer;
 }

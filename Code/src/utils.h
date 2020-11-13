@@ -1,12 +1,7 @@
 #ifndef UTILS_H
 #define UTILS_H
-#include <iostream>
 #include <list>
 #include <tuple>
-#include <vector>
-#include <map>
-#include <fstream>
-#include <sstream>
 
 using namespace std;
 
@@ -46,10 +41,11 @@ bool isLegal(tuple<int, int, int> b, std::list<tuple<int, int, int>>* tour) {
     }
     return true;
 }
+
 bool canBlockFit(tuple<int, int, int> topBlock, tuple<int, int, int> bottomBlock) {
-    return get<1>(bottomBlock) > get<1>(topBlock) &&
-        get<2>(bottomBlock) > get<2>(topBlock);
+    return get<1>(bottomBlock) > get<1>(topBlock) && get<2>(bottomBlock) > get<2>(topBlock);
 }
+
 int findHighestFittingIndex(list<tuple<int, int, int>>& towerBlocks, tuple<int, int, int>* block) {
     std::list<tuple<int, int, int>>::iterator it = towerBlocks.begin();
     for (int i = 0; i < towerBlocks.size(); ++i) {
@@ -60,4 +56,18 @@ int findHighestFittingIndex(list<tuple<int, int, int>>& towerBlocks, tuple<int, 
     }
     return 0;
 }
+
+bool isTowerValid(list<tuple<int, int, int>> towerBlocks) {
+    tuple<int, int, int> lastRemembered = { make_tuple(0, 0, 0) };
+    for (std::list<tuple<int, int, int>>::iterator it = towerBlocks.begin(); it != towerBlocks.end(); ++it) {
+        if (lastRemembered != make_tuple(0, 0, 0)) {
+            if (!canBlockFit(*it, lastRemembered)) {
+                return false;
+            }
+        }
+        lastRemembered = *it;
+    }
+    return true;
+}
+
 #endif
