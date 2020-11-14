@@ -13,7 +13,6 @@ int calculHeightCandidat(list<tuple<int, int, int>>* localSolution,
     int RemovedblocHeight = 0;
     int posIndexMaxFound = 0;
 
-
     posIndexMaxFound = findHighestFittingIndex(candidate, &bloc);
 
     list<tuple< int, int, int >>::iterator it1 = candidate.begin();
@@ -39,7 +38,6 @@ list<tuple<int, int, int>> fitVoisinsInSolution(list<tuple<int, int, int>>* loca
     list<tuple<int, int, int>> candidate = *localSolution;
     int posIndexMaxFound = 0;
 
-
     posIndexMaxFound = findHighestFittingIndex(candidate, &bloc);
 
     list<tuple< int, int, int >>::iterator it1 = candidate.begin();
@@ -50,7 +48,6 @@ list<tuple<int, int, int>> fitVoisinsInSolution(list<tuple<int, int, int>>* loca
     else {
         candidate.insert(it1, bloc);
     }
-
 
     for (int i = posIndexMaxFound + 1; i < candidate.size(); i++) {
         if (!canBlockFit(*it1, bloc)) {
@@ -94,13 +91,13 @@ void addToTabou(list<tuple<int, int, int, int>>* tabuList, list<tuple<int, int, 
 
 list<tuple<int, int, int>> maximize(list<tuple<int, int, int>>* solutionLocal,
                                     list<tuple<int, int, int, int>>* listTabou,
-                                    list<tuple<int, int, int>>* listVoisins) {
+                                    list<tuple<int, int, int>>* listOfNeighbors) {
     list<tuple<int, int, int>> solutionMaximized = {};
     list<tuple<int, int, int>> blocksRemovedFinal = {};
     tuple<int, int, int> maximizingBlocs;
     int newTotalHeightMax = 0;
 
-    for (tuple<int, int, int> bloc : *listVoisins) {
+    for (tuple<int, int, int> bloc : *listOfNeighbors) {
         list<tuple<int, int, int>> solutionCandidate;
         int newTotalHeight = calculHeightCandidat(solutionLocal, bloc);
 
@@ -118,11 +115,11 @@ list<tuple<int, int, int>> maximize(list<tuple<int, int, int>>* solutionLocal,
     list<tuple<int, int, int>> voisinsLibre = deleteFromTabou(listTabou);
     if (voisinsLibre.size()) {
         for (tuple<int, int, int> bloc : voisinsLibre) {
-            listVoisins->push_back(bloc);
+            listOfNeighbors->push_back(bloc);
         }
     }
     if (true) {
-        listVoisins->remove(maximizingBlocs);
+        listOfNeighbors->remove(maximizingBlocs);
     }
     if (solutionMaximized.size()) {
         solutionLocal = &solutionMaximized;
@@ -133,24 +130,24 @@ list<tuple<int, int, int>> maximize(list<tuple<int, int, int>>* solutionLocal,
 
 list<tuple<int, int, int>> tabou(std::list<tuple<int, int, int>>* points) {
     
-    list<tuple<int, int, int>> solutionGlobale = {};
-    list<tuple<int, int, int>> solutionLocale = {};
-    list<tuple<int, int, int>> listvoisins = *points;
+    list<tuple<int, int, int>> globalSolution = {};
+    list<tuple<int, int, int>> localSolution = {};
+    list<tuple<int, int, int>> listOfNeighbors = *points;
     list<tuple<int, int, int, int>> listTabou = {};
 	int iterationWithoutAmelioration = 0;
 
 	while (iterationWithoutAmelioration < 100) {
-        solutionLocale = maximize(&solutionLocale, &listTabou, &listvoisins);
-		if (totalHeight(&solutionGlobale) < totalHeight(&solutionLocale)) {
-			solutionGlobale = solutionLocale;
+        localSolution = maximize(&localSolution, &listTabou, &listOfNeighbors);
+		if (totalHeight(&globalSolution) < totalHeight(&localSolution)) {
+			globalSolution = localSolution;
 			iterationWithoutAmelioration = 0;
 		}
 		else {
 			iterationWithoutAmelioration += 1;
 		}
 	}
-    cout << totalHeight(&solutionGlobale) << endl;
+    cout << totalHeight(&globalSolution) << endl;
 
-    return solutionGlobale;
+    return globalSolution;
 }
 #endif

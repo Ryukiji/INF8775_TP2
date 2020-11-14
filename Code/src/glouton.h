@@ -8,14 +8,14 @@ using namespace std;
 
 list<tuple<int, int, int>> vorace(std::list<tuple<int, int, int>>* points) {
     points->sort(sortSurface);
-    list<tuple<int, int, int>> tour;
+    list<tuple<int, int, int>> tower;
     for (std::list<tuple<int, int, int>>::iterator it = points->begin(); it != points->end(); ++it) {
-        if (isLegal(*it, &tour))
+        if (isLegal(*it, &tower))
         {
-            tour.push_back(*it);
+            tower.push_back(*it);
         }
     }
 
-    return tour;
+    return tower;
 }
 #endif

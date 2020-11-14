@@ -57,17 +57,4 @@ int findHighestFittingIndex(list<tuple<int, int, int>>& towerBlocks, tuple<int, 
     return 0;
 }
 
-bool isTowerValid(list<tuple<int, int, int>> towerBlocks) {
-    tuple<int, int, int> lastRemembered = { make_tuple(0, 0, 0) };
-    for (std::list<tuple<int, int, int>>::iterator it = towerBlocks.begin(); it != towerBlocks.end(); ++it) {
-        if (lastRemembered != make_tuple(0, 0, 0)) {
-            if (!canBlockFit(*it, lastRemembered)) {
-                return false;
-            }
-        }
-        lastRemembered = *it;
-    }
-    return true;
-}
-
 #endif

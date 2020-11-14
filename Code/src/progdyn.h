@@ -10,7 +10,7 @@ list<tuple<int,int,int>> dynamicProgramming(list<tuple<int,int,int>>* points) {
     points->sort(sortSurface);
     int n = points->size();
     int height[n];
-    map<tuple<int,int,int>, tuple<int,int,int>> blocs;
+    map<tuple<int,int,int>, tuple<int,int,int>> blocs = {};
     list<tuple<int,int,int>>::iterator it = points->begin();
     for (int i = 0; i < n; i++) {
         height[i] = get<0>(*it);
@@ -22,12 +22,12 @@ list<tuple<int,int,int>> dynamicProgramming(list<tuple<int,int,int>>* points) {
         list<tuple<int,int,int>>::iterator it2 = points->begin();
         for (int j = 0; j < i; j++ ) {
             if ( get<1>(*it1) < get<1>(*it2) && 
-                get<2>(*it1) < get<2>(*it2) && 
-                height[i] < height[j] + get<0>(*it1) 
-            )
+                get<2>(*it1) < get<2>(*it2)) 
             {
-                height[i] = height[j] + get<0>(*it1);
-                blocs[*it1] = *it2;
+                if (height[i] < height[j] + get<0>(*it1)) {
+                    height[i] = height[j] + get<0>(*it1);
+                    blocs[*it1] = *it2;
+                }
             }
             it2++;
         }
@@ -46,10 +46,9 @@ list<tuple<int,int,int>> dynamicProgramming(list<tuple<int,int,int>>* points) {
     answer.push_back(currentBloc);
     answer.sort(sortSurface);
 
-    int max = -1; 
+    int maxm = -1; 
     for ( int i = 0; i < n; i++ ) 
-        if ( max < height[i] ) 
-            max = height[i];
+        maxm = max(maxm, height[i]);
 
     return answer;
 }
